@@ -1,1 +1,2 @@
-# comics_to_vk
+# Comics publisher
+
