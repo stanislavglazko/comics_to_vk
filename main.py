@@ -89,10 +89,10 @@ def post_comic_to_the_wall(token_vk, api_version, group_id, message):
 
 def main():
     api_version = '5.130'
-    group_id = '203432215'
     load_dotenv()
     id_vk = os.getenv("CLIENT_ID")
     token_vk = os.getenv("ACCESS_TOKEN")
+    group_id = os.getenv("GROUP_ID")
     comic_number = random.randint(1, quantity_of_comics())
     comic_comment = load_comic(comic_number)
     post_comic_to_the_wall(token_vk, api_version, group_id, comic_comment)
