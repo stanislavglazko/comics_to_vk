@@ -15,8 +15,6 @@ def load_img(filename, url):
 
 def load_comic(comic_number):
     url = f'http://xkcd.com/{comic_number}/info.0.json'
-    if not comic_number:
-        url = 'http://xkcd.com/info.0.json'
     response = requests.get(url)
     response.raise_for_status()
     img_url = response.json()['img']
