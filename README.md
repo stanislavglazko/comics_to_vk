@@ -1,7 +1,7 @@
 # Comics publisher
 
-My app downloads comics from https://xkcd.com/ and post to your community in vk.
-It makes random choice from xkcd.com collection of comics, 
+My app downloads comic from https://xkcd.com/ and post it to your community in vk.
+My app makes random choice from xkcd.com collection of comics, 
 takes image and comment and make a post on the wall of your community. 
 
 ### How to install
