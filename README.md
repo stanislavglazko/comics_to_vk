@@ -17,7 +17,7 @@ Python3 should be already installed.
 4) add .env file in the directory of the tool:
     ```
     ACCESS_TOKEN=<your_personal_access_token_in_vk>
-    GROUP_ID=<your_comunity_in_vk_id>
+    GROUP_ID=<your_community_in_vk_id>
     ```
    
 ### How to use
