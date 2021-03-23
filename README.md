@@ -13,8 +13,12 @@ Python3 should be already installed.
     pip install -r requirements.txt
     ```
 3) you must have an account, community and application in vk
+
+4) for getting ACCESS_TOKEN use Implicit Flow https://vk.com/dev/implicit_flow_user
+   But delete parameter 'redirect_uri' from request. 
+   And parameter 'scope' must be: scope=photos,groups,wall,offline.
    
-4) add .env file in the directory of the tool:
+5) add .env file in the directory of the tool:
     ```
     ACCESS_TOKEN=<your_personal_access_token_in_vk>
     GROUP_ID=<your_community_in_vk_id>
