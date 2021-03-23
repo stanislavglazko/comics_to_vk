@@ -23,7 +23,7 @@ def load_comic(comic_number):
     return comic_comment
 
 
-def quantity_of_comics():
+def get_quantity_of_comics():
     url = 'http://xkcd.com/info.0.json'
     response = requests.get(url)
     response.raise_for_status()
@@ -92,7 +92,7 @@ def main():
     load_dotenv()
     token_vk = os.getenv("ACCESS_TOKEN")
     group_id = os.getenv("GROUP_ID")
-    comic_number = random.randint(1, quantity_of_comics())
+    comic_number = random.randint(1, get_quantity_of_comics())
     comic_comment = load_comic(comic_number)
     post_comic_to_the_wall(token_vk, api_version, group_id, comic_comment)
     os.remove('comic.png')
