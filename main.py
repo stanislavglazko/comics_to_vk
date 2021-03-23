@@ -72,7 +72,7 @@ def save_comic_to_community(token_vk, api_version, group_id, vk_server, vk_photo
     }
     response = requests.post(url, params=payload)
     check_vk_response(response.json())
-    return response.json()['response'][0]['id'], response.json()['response'][0]['owner_id'],
+    return response.json()['response'][0]['id'], response.json()['response'][0]['owner_id']
 
 
 def post_comic_to_the_wall(token_vk, api_version, group_id, message, vk_answer_media_id, vk_answer_owner_id):
