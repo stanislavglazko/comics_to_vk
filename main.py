@@ -8,8 +8,7 @@ from dotenv import load_dotenv
 def load_img(filename, url):
     response = requests.get(url)
     response.raise_for_status()
-    filepath = filename
-    with open(filepath, 'wb') as file:
+    with open(filename, 'wb') as file:
         file.write(response.content)
 
 
@@ -42,21 +41,18 @@ def get_adress_for_comic(token_vk, api_version, group_id):
     return response.json()['response']['upload_url']
 
 
-def load_comic_to_vk_server(token_vk, api_version, group_id, filename):
+def load_comic_to_vk_server(filename, url):
     with open(filename, 'rb') as file:
-        url = get_adress_for_comic(token_vk, api_version, group_id)
         files = {
             'photo': file,
         }
         response = requests.post(url, files=files)
         response.raise_for_status()
-        return response.json()
+        return response.json()['server'], response.json()['photo'], response.json()['hash']
 
 
-def save_comic_to_community(token_vk, api_version, group_id, filename):
+def save_comic_to_community(token_vk, api_version, group_id, vk_server, vk_photo, vk_hash):
     url = 'https://api.vk.com/method/photos.saveWallPhoto/'
-    vk_answer = load_comic_to_vk_server(token_vk, api_version, group_id, filename)
-    vk_server, vk_photo, vk_hash = vk_answer['server'], vk_answer['photo'], vk_answer['hash']
     payload = {
         'access_token': token_vk,
         'v': api_version,
@@ -67,14 +63,11 @@ def save_comic_to_community(token_vk, api_version, group_id, filename):
     }
     response = requests.post(url, params=payload)
     response.raise_for_status()
-    return response.json()
+    return response.json()['response'][0]['id'], response.json()['response'][0]['owner_id'],
 
 
-def post_comic_to_the_wall(token_vk, api_version, group_id, message, filename):
+def post_comic_to_the_wall(token_vk, api_version, group_id, message, vk_answer_media_id, vk_answer_owner_id):
     url = 'https://api.vk.com/method/wall.post/'
-    vk_answer = save_comic_to_community(token_vk, api_version, group_id, filename)['response']
-    vk_answer_media_id = vk_answer[0]['id']
-    vk_answer_owner_id = vk_answer[0]['owner_id']
     payload = {
         'access_token': token_vk,
         'v': api_version,
@@ -95,7 +88,26 @@ def main():
     group_id = os.getenv("GROUP_ID")
     comic_number = random.randint(1, get_quantity_of_comics())
     comic_comment = load_comic(comic_number, filename)
-    post_comic_to_the_wall(token_vk, api_version, group_id, comic_comment, filename)
+    adress_for_comic = get_adress_for_comic(token_vk, api_version, group_id)
+    vk_server, vk_photo, vk_hash = \
+        load_comic_to_vk_server(filename, adress_for_comic)
+    vk_answer_media_id, vk_answer_owner_id = \
+        save_comic_to_community(
+            token_vk,
+            api_version,
+            group_id,
+            vk_server,
+            vk_photo,
+            vk_hash,
+        )
+    post_comic_to_the_wall(
+        token_vk,
+        api_version,
+        group_id,
+        comic_comment,
+        vk_answer_media_id,
+        vk_answer_owner_id,
+    )
     os.remove(filename)
 
 
