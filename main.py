@@ -5,6 +5,15 @@ import requests
 from dotenv import load_dotenv
 
 
+class KnownError(Exception):
+    pass
+
+
+def check_vk_response(response):
+    if 'error' in response:
+        raise KnownError
+
+
 def load_img(filename, url):
     response = requests.get(url)
     response.raise_for_status()
@@ -37,7 +46,7 @@ def get_adress_for_comic(token_vk, api_version, group_id):
         'group_id': group_id,
     }
     response = requests.get(url, params=payload)
-    response.raise_for_status()
+    check_vk_response(response.json())
     return response.json()['response']['upload_url']
 
 
@@ -47,7 +56,7 @@ def load_comic_to_vk_server(filename, url):
             'photo': file,
         }
         response = requests.post(url, files=files)
-        response.raise_for_status()
+        check_vk_response(response.json())
         return response.json()['server'], response.json()['photo'], response.json()['hash']
 
 
@@ -62,7 +71,7 @@ def save_comic_to_community(token_vk, api_version, group_id, vk_server, vk_photo
         'hash': vk_hash,
     }
     response = requests.post(url, params=payload)
-    response.raise_for_status()
+    check_vk_response(response.json())
     return response.json()['response'][0]['id'], response.json()['response'][0]['owner_id'],
 
 
@@ -77,7 +86,7 @@ def post_comic_to_the_wall(token_vk, api_version, group_id, message, vk_answer_m
         'attachments': f'photo{vk_answer_owner_id}_{vk_answer_media_id}'
     }
     response = requests.post(url, params=payload)
-    response.raise_for_status()
+    check_vk_response(response.json())
 
 
 def main():
