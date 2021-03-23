@@ -88,27 +88,29 @@ def main():
     group_id = os.getenv("GROUP_ID")
     comic_number = random.randint(1, get_quantity_of_comics())
     comic_comment = load_comic(comic_number, filename)
-    adress_for_comic = get_adress_for_comic(token_vk, api_version, group_id)
-    vk_server, vk_photo, vk_hash = \
-        load_comic_to_vk_server(filename, adress_for_comic)
-    vk_answer_media_id, vk_answer_owner_id = \
-        save_comic_to_community(
+    try:
+        adress_for_comic = get_adress_for_comic(token_vk, api_version, group_id)
+        vk_server, vk_photo, vk_hash = \
+            load_comic_to_vk_server(filename, adress_for_comic)
+        vk_answer_media_id, vk_answer_owner_id = \
+            save_comic_to_community(
+                token_vk,
+                api_version,
+                group_id,
+                vk_server,
+                vk_photo,
+                vk_hash,
+            )
+        post_comic_to_the_wall(
             token_vk,
             api_version,
             group_id,
-            vk_server,
-            vk_photo,
-            vk_hash,
+            comic_comment,
+            vk_answer_media_id,
+            vk_answer_owner_id,
         )
-    post_comic_to_the_wall(
-        token_vk,
-        api_version,
-        group_id,
-        comic_comment,
-        vk_answer_media_id,
-        vk_answer_owner_id,
-    )
-    os.remove(filename)
+    finally:
+        os.remove(filename)
 
 
 if __name__ == '__main__':
