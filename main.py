@@ -1,5 +1,7 @@
+import logging
 import os
 import random
+import sys
 
 import requests
 from dotenv import load_dotenv
@@ -11,7 +13,8 @@ class KnownError(Exception):
 
 def check_vk_response(response):
     if 'error' in response:
-        raise KnownError
+        error_message = response['error']['error_msg']
+        raise KnownError(error_message)
 
 
 def load_img(filename, url):
@@ -93,6 +96,7 @@ def post_comic_to_the_wall(token_vk, api_version, group_id, message, vk_answer_m
 
 
 def main():
+    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s')
     api_version = '5.130'
     filename = 'comic.png'
     load_dotenv()
@@ -121,6 +125,9 @@ def main():
             vk_answer_media_id,
             vk_answer_owner_id,
         )
+    except KnownError as e:
+        logging.error(e)
+        sys.exit(1)
     finally:
         os.remove(filename)
 
