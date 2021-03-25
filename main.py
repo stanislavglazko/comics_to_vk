@@ -100,8 +100,8 @@ def main():
     api_version = '5.130'
     filename = 'comic.png'
     load_dotenv()
-    token_vk = os.getenv("ACCESS_TOKEN")
-    group_id = os.getenv("GROUP_ID")
+    token_vk = os.getenv("VK_ACCESS_TOKEN")
+    group_id = os.getenv("VK_GROUP_ID")
     comic_number = random.randint(1, get_quantity_of_comics())
     comic_comment = load_comic(comic_number, filename)
     try:
