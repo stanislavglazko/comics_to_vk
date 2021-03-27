@@ -49,9 +49,9 @@ def get_adress_for_comic(token_vk, api_version, group_id):
         'group_id': group_id,
     }
     response = requests.get(url, params=payload)
-    response_in_json = response.json()
-    check_vk_response(response_in_json)
-    return response_in_json['response']['upload_url']
+    response = response.json()
+    check_vk_response(response)
+    return response['response']['upload_url']
 
 
 def load_comic_to_vk_server(filename, url):
@@ -60,9 +60,9 @@ def load_comic_to_vk_server(filename, url):
             'photo': file,
         }
         response = requests.post(url, files=files)
-        response_in_json = response.json()
-        check_vk_response(response_in_json)
-        return response_in_json['server'], response_in_json['photo'], response_in_json['hash']
+        response = response.json()
+        check_vk_response(response)
+        return response['server'], response['photo'], response['hash']
 
 
 def save_comic_to_community(token_vk, api_version, group_id, vk_server, vk_photo, vk_hash):
@@ -76,9 +76,9 @@ def save_comic_to_community(token_vk, api_version, group_id, vk_server, vk_photo
         'hash': vk_hash,
     }
     response = requests.post(url, params=payload)
-    response_in_json = response.json()
-    check_vk_response(response.json())
-    return response_in_json['response'][0]['id'], response_in_json['response'][0]['owner_id']
+    response = response.json()
+    check_vk_response(response)
+    return response['response'][0]['id'], response['response'][0]['owner_id']
 
 
 def post_comic_to_the_wall(token_vk, api_version, group_id, message, vk_answer_media_id, vk_answer_owner_id):
